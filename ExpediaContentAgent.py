@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 from bs4 import BeautifulSoup
 from io import BytesIO
-from streamlit_summernote import summernote
+import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Expedia Content Generator", page_icon="🌍")
 st.title("🌍 Expedia Travel Content Generator")
@@ -76,9 +76,31 @@ for i in range(num_entries):
     publishable = st.text_input("PUBLISHABLE (*) (true/false)", key=f"pub_{i}")
     title = st.text_input("TITLE", key=f"title_{i}")
     subtitle = st.text_input("SUBTITLE", key=f"subtitle_{i}")
-    body = summernote(label="BODY", height=200, key=f"body_{i}")
     media_assets = st.text_input("MEDIA_ASSETS", key=f"media_{i}")
     url_list = st.text_input("URL_LIST", key=f"url_{i}")
+
+    st.markdown("**BODY (use the rich text editor below):**")
+    editor_id = f"editor_{i}"
+    components.html(f'''
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <div id="{editor_id}"></div>
+    <textarea id="{editor_id}_input" style="display:none;"></textarea>
+    <script>
+    const textarea = document.getElementById('{editor_id}_input');
+    $('#{editor_id}').summernote({{
+        height: 200,
+        callbacks: {{
+            onChange: function(contents) {{
+                textarea.value = contents;
+            }}
+        }}
+    }});
+    </script>
+    ''', height=300)
+
+    body = st.text_area("Paste BODY HTML from above editor here:", key=f"body_{i}")
 
     content_entries.append({
         "NAME (*)": name,
@@ -135,7 +157,7 @@ if st.button("Generate Excel File"):
     output.seek(0)
     st.success("✅ Excel file generated successfully!")
     st.download_button("📥 Download Excel File", data=output, file_name="expedia_content_upload.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    
+
     st.markdown("""
     ---
     🎯 **Next Step: Generate Your Landing Page Template**
