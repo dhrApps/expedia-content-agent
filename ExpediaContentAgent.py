@@ -5,11 +5,11 @@ from bs4 import BeautifulSoup
 from io import BytesIO
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Expedia Content Generator", page_icon="🌍")
-st.title("🌍 Expedia Travel Content Generator")
+st.set_page_config(page_title="Travel Content Generator", page_icon="🌍")
+st.title("Content Generator")
 
 st.write("""
-Welcome to the Expedia Content Generator! ✈️🏝️
+Welcome to the Content Generator! ✈️🏝️
 
 Create stunning content for your next travel campaign — fast and formatted perfectly.
 
