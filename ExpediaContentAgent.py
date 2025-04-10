@@ -79,7 +79,15 @@ for i in range(num_entries):
     media_assets = st.text_input("MEDIA_ASSETS", key=f"media_{i}")
     url_list = st.text_input("URL_LIST", key=f"url_{i}")
 
-    st.markdown("**BODY (use the rich text editor below):**")
+    
+    st.markdown("**BODY (Enter plain text below):**")
+    body_plain = st.text_area("Enter BODY content (plain text):", key=f"body_{i}", height=300)
+    def convert_to_html(plain_text):
+        lines = plain_text.strip().split("\n")
+        html = "".join(f"<p>{line.strip()}</p>" for line in lines if line.strip())
+        return html
+    body = convert_to_html(body_plain)
+    
     editor_id = f"editor_{i}"
     components.html(f'''
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
